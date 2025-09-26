@@ -79,12 +79,12 @@ export default function PollingPage() {
   return (
     <AppLayout pageTitle="Polling Day - LIVE">
         <div className="space-y-6">
-            <Alert className="bg-accent/20 border-accent/50 text-accent-foreground">
-                <AlertOctagon className="h-4 w-4 !text-accent-foreground" />
-                <AlertTitle className="text-accent-foreground/90">Live Polling Day Tracker</AlertTitle>
+            <Alert className="bg-orange-50 border-orange-300 text-orange-900 dark:bg-orange-950 dark:border-orange-700 dark:text-orange-100">
+                <AlertOctagon className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                <AlertTitle className="text-orange-800 dark:text-orange-200 font-semibold">Live Polling Day Tracker</AlertTitle>
                 <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-                    <AlertDescription className="flex-grow">Data refreshes periodically to show real-time status.</AlertDescription>
-                    <Button variant="ghost" size="sm" className="w-full sm:w-auto self-start sm:self-center"><RefreshCw className="mr-2 h-4 w-4"/>Refresh Now</Button>
+                    <AlertDescription className="flex-grow text-orange-700 dark:text-orange-300">Data refreshes periodically to show real-time status.</AlertDescription>
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto self-start sm:self-center border-orange-300 text-orange-700 hover:bg-orange-100 dark:border-orange-600 dark:text-orange-300 dark:hover:bg-orange-900"><RefreshCw className="mr-2 h-4 w-4"/>Refresh Now</Button>
                 </div>
             </Alert>
             

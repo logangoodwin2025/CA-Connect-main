@@ -121,10 +121,10 @@ const MessageCampaignCard = ({ message, allContacts }: { message: MessageTemplat
                                 </ScrollArea>
                                 <div className="space-y-3 pt-4">
                                     <p className="font-semibold text-sm">Select Channel</p>
-                                    <div className="flex flex-col sm:flex-row justify-around gap-2">
-                                        <Button variant="outline" className="flex-1"><BotMessageSquare className="mr-2 h-5 w-5"/> WhatsApp</Button>
-                                        <Button variant="outline" className="flex-1"><Mail className="mr-2 h-5 w-5"/> Email</Button>
-                                        <Button variant="outline" className="flex-1"><MessageSquare className="mr-2 h-5 w-5"/> SMS</Button>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                        <Button variant="outline" className="w-full"><BotMessageSquare className="mr-2 h-4 w-4"/> WhatsApp</Button>
+                                        <Button variant="outline" className="w-full"><Mail className="mr-2 h-4 w-4"/> Email</Button>
+                                        <Button variant="outline" className="w-full"><MessageSquare className="mr-2 h-4 w-4"/> SMS</Button>
                                     </div>
                                 </div>
                                 <div className="pt-4 flex justify-end">

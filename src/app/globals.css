@@ -87,4 +87,22 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   }
+
+  /* Responsive typography for mobile-first design */
+  .text-responsive-xs { font-size: 0.875rem; line-height: 1.25rem; } /* 14px */
+  .text-responsive-sm { font-size: 1rem; line-height: 1.5rem; } /* 16px */
+  .text-responsive-base { font-size: 1.125rem; line-height: 1.75rem; } /* 18px */
+  .text-responsive-lg { font-size: 1.25rem; line-height: 1.75rem; } /* 20px */
+  .text-responsive-xl { font-size: 1.5rem; line-height: 2rem; } /* 24px */
+  .text-responsive-2xl { font-size: 2rem; line-height: 2.5rem; } /* 32px */
+
+  /* On larger screens, use standard sizes */
+  @media (min-width: 768px) {
+    .text-responsive-xs { font-size: 0.75rem; line-height: 1rem; } /* 12px */
+    .text-responsive-sm { font-size: 0.875rem; line-height: 1.25rem; } /* 14px */
+    .text-responsive-base { font-size: 1rem; line-height: 1.5rem; } /* 16px */
+    .text-responsive-lg { font-size: 1.125rem; line-height: 1.75rem; } /* 18px */
+    .text-responsive-xl { font-size: 1.25rem; line-height: 1.75rem; } /* 20px */
+    .text-responsive-2xl { font-size: 1.5rem; line-height: 2rem; } /* 24px */
+  }
 }

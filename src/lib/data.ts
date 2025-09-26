@@ -1,5 +1,5 @@
 
-import type { Contact, MessageTemplate, User } from '@/lib/types';
+import type { Contact, MessageTemplate, User, PromotionRequest } from '@/lib/types';
 
 export const mockUser: User = {
   name: 'Sunil',
@@ -140,5 +140,35 @@ export const mockMessages: MessageTemplate[] = [
         received: '3 days ago',
         content: "We appreciate your continued engagement and contribution. Please continue to share information with your network and encourage their participation.",
         type: 'Urgent',
+    }
+];
+
+export const mockPromotionRequests: PromotionRequest[] = [
+    {
+        id: 'req1',
+        contactId: '1',
+        contactName: 'Priya Sharma',
+        requestedBy: 'Campaigner User',
+        reason: 'Has built a strong network of 15+ contacts and shows excellent leadership potential',
+        status: 'Pending',
+        requestedAt: '2 days ago'
+    },
+    {
+        id: 'req2',
+        contactId: '3',
+        contactName: 'Sara Ali',
+        requestedBy: 'Campaigner User',
+        reason: 'Highly influential in their community and has recruited 8 new supporters',
+        status: 'Pending',
+        requestedAt: '1 day ago'
+    },
+    {
+        id: 'req3',
+        contactId: '7',
+        contactName: 'Sunita Gupta',
+        requestedBy: 'Campaigner User',
+        reason: 'Demonstrates strong organizational skills and community engagement',
+        status: 'Approved',
+        requestedAt: '3 days ago'
     }
 ];

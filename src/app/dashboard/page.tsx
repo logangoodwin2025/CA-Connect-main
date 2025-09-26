@@ -8,7 +8,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { mockUser, mockContacts, mockMessages, secondLevelNetworks } from "@/lib/data";
+import { mockUser, mockContacts, mockMessages, secondLevelNetworks, mockPromotionRequests } from "@/lib/data";
 import { PlusCircle, MessageSquare, AlertTriangle, Users, Send, CheckCircle, UserPlus, Gem, HelpCircle } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Line }
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import type { Contact, Relationship } from "@/lib/types";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
 
 
 function CampaignerDashboard() {
@@ -117,9 +118,29 @@ function CampaignerDashboard() {
 };
 
 function CandidateDashboard() {
+    const { toast } = useToast();
     const directContacts = mockContacts;
     const indirectContacts = Object.values(secondLevelNetworks).flat();
     const allContacts = [...directContacts, ...indirectContacts];
+
+    const handleApproveRequest = (requestId: string) => {
+        // In a real app, this would update the request status and send invite
+        console.log(`Approved promotion request ${requestId}`);
+        toast({
+            title: "Promotion Approved!",
+            description: "An invitation has been sent to the contact to become a campaigner.",
+        });
+    };
+
+    const handleDenyRequest = (requestId: string) => {
+        // In a real app, this would update the request status
+        console.log(`Denied promotion request ${requestId}`);
+        toast({
+            title: "Promotion Denied",
+            description: "The request has been denied.",
+            variant: "destructive",
+        });
+    };
     
     const totalNetworkReach = 4387;
     const activeMembers = 639;
@@ -177,7 +198,7 @@ function CandidateDashboard() {
                 </CardHeader>
             </Card>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-3 grid-cols-2 md:gap-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Network Reach</CardTitle>
@@ -228,8 +249,8 @@ function CandidateDashboard() {
                         <div className="text-3xl font-bold text-primary pt-2">{supportScore.toLocaleString()}</div>
                     </CardHeader>
                     <CardContent className="-mt-4">
-                        <ChartContainer config={supportScoreTrendConfig} className="min-h-[160px] w-full">
-                            <ResponsiveContainer width="100%" height={160}>
+                        <ChartContainer config={supportScoreTrendConfig} className="min-h-[120px] md:min-h-[160px] w-full">
+                            <ResponsiveContainer width="100%" height={120}>
                                 <RechartsPrimitive.LineChart data={supportScoreTrendData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                                     <CartesianGrid vertical={false} strokeDasharray="3 3" />
                                     <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} fontSize={12} />
@@ -254,8 +275,8 @@ function CandidateDashboard() {
                         <CardDescription>Breakdown of support across your entire network.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <ChartContainer config={supportChartConfig} className="min-h-[200px] w-full">
-                            <ResponsiveContainer width="100%" height={200}>
+                        <ChartContainer config={supportChartConfig} className="min-h-[160px] md:min-h-[200px] w-full">
+                            <ResponsiveContainer width="100%" height={160}>
                                 <BarChart accessibilityLayer data={supportData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                                     <XAxis dataKey="level" tickLine={false} tickMargin={10} axisLine={false} />
                                     <YAxis tickFormatter={(value) => new Intl.NumberFormat('en-US', { notation: 'compact' }).format(value as number)} />
@@ -293,6 +314,39 @@ function CandidateDashboard() {
                     <Badge variant={contact.support === 'High' ? 'default' : 'secondary'}>{contact.support}</Badge>
                   </div>
                 ))}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserPlus className="h-5 w-5" />
+                  Campaigner Promotion Requests
+                </CardTitle>
+                <CardDescription>Review requests to promote contacts to campaigner status</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {mockPromotionRequests.filter(req => req.status === 'Pending').length > 0 ? (
+                  mockPromotionRequests.filter(req => req.status === 'Pending').map(request => (
+                    <div key={request.id} className="p-3 border rounded-lg space-y-3">
+                      <div className="flex-grow">
+                        <p className="font-semibold text-sm">{request.contactName}</p>
+                        <p className="text-xs text-muted-foreground">Requested by: {request.requestedBy}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{request.reason}</p>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <Button variant="outline" size="sm" className="flex-1" onClick={() => handleApproveRequest(request.id)}>
+                          Approve
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex-1" onClick={() => handleDenyRequest(request.id)}>
+                          Deny
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center py-4">No pending promotion requests</p>
+                )}
               </CardContent>
             </Card>
 

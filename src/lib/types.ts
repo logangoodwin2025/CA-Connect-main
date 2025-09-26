@@ -31,3 +31,13 @@ export interface User {
   name: string;
   level?: number;
 }
+
+export interface PromotionRequest {
+  id: string;
+  contactId: string;
+  contactName: string;
+  requestedBy: string; // campaigner name
+  reason: string;
+  status: 'Pending' | 'Approved' | 'Denied';
+  requestedAt: string;
+}

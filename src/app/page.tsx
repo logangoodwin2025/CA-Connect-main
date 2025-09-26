@@ -19,18 +19,18 @@ export default function OnboardingPage() {
               Select your role to continue to the portal.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             <Link href="/dashboard?role=candidate" className="w-full">
-              <Button className="w-full h-12 text-md" variant="default">
+              <Button className="w-full h-12 text-base font-medium" variant="default">
                 Login as Candidate
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <Link href="/dashboard?role=campaigner" className="w-full">
-               <Button className="w-full h-12 text-md" variant="secondary">
-                Login as Campaigner
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+               <Button className="w-full h-12 text-base font-medium" variant="secondary">
+                 Login as Campaigner
+                 <ArrowRight className="ml-2 h-5 w-5" />
+               </Button>
             </Link>
           </CardContent>
         </Card>

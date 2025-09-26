@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { mockContacts as initialContacts } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Clock, Edit, Users, XCircle, PlusCircle, Share2, Copy, ArrowLeft, Search } from "lucide-react";
+import { CheckCircle2, Clock, Edit, Users, XCircle, PlusCircle, Share2, Copy, ArrowLeft, Search, UserPlus } from "lucide-react";
 import type { AppStatus, Contact, Relationship, SupportLikelihood } from "@/lib/types";
 import { useState } from "react";
 import {
@@ -25,6 +25,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
 const statusIcons: Record<AppStatus, React.ReactNode> = {
@@ -52,6 +53,10 @@ function ContactsPageContent() {
   const [editedRelationship, setEditedRelationship] = useState<Relationship>('Friend');
   const [editedSupport, setEditedSupport] = useState<SupportLikelihood>('Unsure');
 
+  const [isPromotionDialogOpen, setIsPromotionDialogOpen] = useState(false);
+  const [promotionContact, setPromotionContact] = useState<Contact | null>(null);
+  const [promotionReason, setPromotionReason] = useState('');
+
   const [searchQuery, setSearchQuery] = useState('');
   const [relationshipFilter, setRelationshipFilter] = useState<Relationship | 'all'>('all');
   const [supportFilter, setSupportFilter] = useState<SupportLikelihood | 'all'>('all');
@@ -68,13 +73,33 @@ function ContactsPageContent() {
 
   const handleSaveChanges = () => {
     if (selectedContact) {
-      setContacts(contacts.map(c => 
-        c.id === selectedContact.id 
-          ? { ...c, relationship: editedRelationship, support: editedSupport } 
+      setContacts(contacts.map(c =>
+        c.id === selectedContact.id
+          ? { ...c, relationship: editedRelationship, support: editedSupport }
           : c
       ));
       setIsEditDialogOpen(false);
       setSelectedContact(null);
+    }
+  };
+
+  const handleRequestPromotion = (contact: Contact) => {
+    setPromotionContact(contact);
+    setPromotionReason('');
+    setIsPromotionDialogOpen(true);
+  };
+
+  const handleSubmitPromotionRequest = () => {
+    if (promotionContact && promotionReason.trim()) {
+      // In a real app, this would send the request to the backend
+      console.log(`Promotion request for ${promotionContact.name}: ${promotionReason}`);
+      toast({
+        title: "Promotion Request Sent!",
+        description: `Your request to promote ${promotionContact.name} has been sent to the candidate for approval.`,
+      });
+      setIsPromotionDialogOpen(false);
+      setPromotionContact(null);
+      setPromotionReason('');
     }
   };
 
@@ -192,31 +217,38 @@ function ContactsPageContent() {
             <CardContent className="p-0">
                 <div className="space-y-2">
                     {filteredContacts.map((contact) => (
-                        <div key={contact.id} className="flex items-center p-4 border-t">
-                            <div className="flex-grow">
-                                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                    <span className="text-lg">{supportInfo[contact.support].emoji}</span>
-                                    <p className="font-semibold">{contact.name}</p>
-                                    <Badge variant="outline">{contact.relationship}</Badge>
-                                    <Badge variant="secondary">{contact.support}</Badge>
-                                </div>
-                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                    <div className="flex items-center gap-1">
-                                        {statusIcons[contact.appStatus]}
-                                        <span>{contact.appStatus}</span>
+                        <div key={contact.id} className="p-4 border-t space-y-3">
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="flex-grow min-w-0">
+                                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                        <span className="text-lg">{supportInfo[contact.support].emoji}</span>
+                                        <p className="font-semibold truncate">{contact.name}</p>
+                                        <Badge variant="outline" className="text-xs">{contact.relationship}</Badge>
+                                        <Badge variant="secondary" className="text-xs">{contact.support}</Badge>
                                     </div>
-                                    {contact.appStatus === 'Installed' && (
-                                       <div className="flex items-center gap-1">
-                                        <Users className="h-3 w-3"/>
-                                        <span>{contact.networkSize}</span>
-                                      </div>
+                                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                        <div className="flex items-center gap-1">
+                                            {statusIcons[contact.appStatus]}
+                                            <span>{contact.appStatus}</span>
+                                        </div>
+                                        {contact.appStatus === 'Installed' && (
+                                           <div className="flex items-center gap-1">
+                                            <Users className="h-3 w-3"/>
+                                            <span>{contact.networkSize}</span>
+                                          </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex gap-1 shrink-0">
+                                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEditClick(contact)}>
+                                        <Edit className="h-4 w-4" />
+                                    </Button>
+                                    {role === 'campaigner' && (
+                                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleRequestPromotion(contact)}>
+                                            <UserPlus className="h-4 w-4" />
+                                        </Button>
                                     )}
                                 </div>
-                            </div>
-                            <div className="flex gap-2 ml-2">
-                                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => handleEditClick(contact)}>
-                                    <Edit className="h-4 w-4" />
-                                </Button>
                             </div>
                         </div>
                     ))}
@@ -262,7 +294,7 @@ function ContactsPageContent() {
                 Support
               </Label>
               <Select value={editedSupport} onValueChange={(value) => setEditedSupport(value as SupportLikelihood)}>
-                 <SelectTrigger className="col-span-3">
+                <SelectTrigger className="col-span-3">
                   <SelectValue placeholder="Select support likelihood" />
                 </SelectTrigger>
                 <SelectContent>
@@ -273,9 +305,40 @@ function ContactsPageContent() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back
             </Button>
             <Button onClick={handleSaveChanges}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isPromotionDialogOpen} onOpenChange={setIsPromotionDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Request Promotion for {promotionContact?.name}</DialogTitle>
+            <DialogDescription>
+              Submit a request to the candidate to promote this contact to campaigner status.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <Label htmlFor="promotion-reason">Reason for Promotion</Label>
+              <Textarea
+                id="promotion-reason"
+                placeholder="Explain why this contact should be promoted to campaigner..."
+                value={promotionReason}
+                onChange={(e) => setPromotionReason(e.target.value)}
+                rows={4}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsPromotionDialogOpen(false)}>
+              <ArrowLeft className="mr-2 h-4 w-4" /> Cancel
+            </Button>
+            <Button onClick={handleSubmitPromotionRequest} disabled={!promotionReason.trim()}>
+              <UserPlus className="mr-2 h-4 w-4" /> Submit Request
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

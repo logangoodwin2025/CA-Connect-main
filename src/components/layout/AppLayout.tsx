@@ -21,6 +21,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import { CampaignLogo } from "@/components/icons";
 import { Input } from "@/components/ui/input";
@@ -99,6 +100,9 @@ function AppLayoutContent({
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
+              <VisuallyHidden>
+                <DialogTitle>Navigation Menu</DialogTitle>
+              </VisuallyHidden>
               <nav className="grid gap-2 text-lg font-medium">
                 <Link
                   href={appendRoleToHref('/dashboard')}
@@ -121,10 +125,10 @@ function AppLayoutContent({
             </SheetContent>
           </Sheet>
           <div className="w-full flex-1">
-             <h1 className="text-lg md:text-xl font-semibold">{pageTitle}</h1>
+             <h1 className="text-responsive-lg font-semibold">{pageTitle}</h1>
           </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-background glass-subtle">
+        <main className="flex flex-1 flex-col gap-3 md:gap-4 lg:gap-6 p-3 md:p-4 lg:p-6 bg-background glass-subtle">
           {children}
         </main>
       </div>
