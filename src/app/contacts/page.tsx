@@ -1,6 +1,7 @@
 
 'use client';
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
 import { AppLayout } from "@/components/layout/AppLayout";
@@ -43,14 +44,14 @@ const allRelationships: Relationship[] = ['Family', 'Friend', 'Colleague', 'Neig
 const allSupportLevels: SupportLikelihood[] = ['High', 'Medium', 'Low', 'Unsure'];
 
 
-export default function ContactsPage() {
+function ContactsPageContent() {
   const { toast } = useToast();
   const [contacts, setContacts] = useState<Contact[]>(initialContacts);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [editedRelationship, setEditedRelationship] = useState<Relationship>('Friend');
   const [editedSupport, setEditedSupport] = useState<SupportLikelihood>('Unsure');
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [relationshipFilter, setRelationshipFilter] = useState<Relationship | 'all'>('all');
   const [supportFilter, setSupportFilter] = useState<SupportLikelihood | 'all'>('all');
@@ -279,5 +280,13 @@ export default function ContactsPage() {
         </DialogContent>
       </Dialog>
     </AppLayout>
+  );
+}
+
+export default function ContactsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ContactsPageContent />
+    </Suspense>
   );
 }

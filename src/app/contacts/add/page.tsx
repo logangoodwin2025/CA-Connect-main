@@ -1,6 +1,7 @@
 
 "use client";
 
+import { Suspense } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -21,7 +22,7 @@ const supportLevels: { level: SupportLikelihood, emoji: string }[] = [
     { level: 'Unsure', emoji: '❓' }
 ];
 
-export default function AddContactPage() {
+function AddContactPageContent() {
     const [searchResult, setSearchResult] = useState<boolean>(false);
     const [selectedRelationship, setSelectedRelationship] = useState<Relationship | null>(null);
     const [selectedSupport, setSelectedSupport] = useState<SupportLikelihood | null>(null);
@@ -71,9 +72,9 @@ export default function AddContactPage() {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <Separator />
-                            
+
                             <div className="space-y-2">
                                 <Label htmlFor="organization">Organization Name</Label>
                                 <Input id="organization" placeholder="Enter organization name" />
@@ -88,7 +89,7 @@ export default function AddContactPage() {
                                     ))}
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <h3 className="text-sm font-medium mb-2">Support Likelihood (Required)</h3>
                                 <div className="flex flex-wrap gap-2">
@@ -99,7 +100,7 @@ export default function AddContactPage() {
                                     ))}
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <h3 className="text-sm font-medium mb-2">Can Influence Others?</h3>
                                 <div className="flex flex-wrap gap-2">
@@ -108,7 +109,7 @@ export default function AddContactPage() {
                                     <Button variant='outline'>Maybe</Button>
                                 </div>
                             </div>
-                            
+
                             <Separator />
                             <Link href={`/contacts?role=${role}`} className="w-full">
                                 <Button className="w-full" size="lg">Add to My Network</Button>
@@ -118,5 +119,13 @@ export default function AddContactPage() {
                 )}
             </div>
         </AppLayout>
+    );
+}
+
+export default function AddContactPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <AddContactPageContent />
+        </Suspense>
     );
 }

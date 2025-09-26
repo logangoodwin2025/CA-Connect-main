@@ -1,6 +1,7 @@
 
 'use client';
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
 import { AppLayout } from "@/components/layout/AppLayout";
@@ -18,7 +19,7 @@ import type { Contact, Relationship } from "@/lib/types";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
-const CampaignerDashboard = () => {
+function CampaignerDashboard() {
     const latestContacts = mockContacts.slice(0, 3);
     const latestMessage = mockMessages[0];
     const totalContacts = mockContacts.length;
@@ -115,7 +116,7 @@ const CampaignerDashboard = () => {
     );
 };
 
-const CandidateDashboard = () => {
+function CandidateDashboard() {
     const directContacts = mockContacts;
     const indirectContacts = Object.values(secondLevelNetworks).flat();
     const allContacts = [...directContacts, ...indirectContacts];
@@ -301,7 +302,7 @@ const CandidateDashboard = () => {
 };
 
 
-export default function DashboardPage() {
+function DashboardPageContent() {
     const searchParams = useSearchParams();
     const role = searchParams.get('role') || 'campaigner';
     const isCandidate = role === 'candidate';
@@ -310,6 +311,14 @@ export default function DashboardPage() {
         <AppLayout pageTitle={isCandidate ? "Candidate Dashboard" : "Home"}>
             {isCandidate ? <CandidateDashboard /> : <CampaignerDashboard />}
         </AppLayout>
+    );
+}
+
+export default function DashboardPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <DashboardPageContent />
+        </Suspense>
     );
 }
 

@@ -1,6 +1,7 @@
 
 'use client';
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
 import { Home, Users, MessageSquare, Network, Vote, Share2, Menu, Settings, Copy, ArrowLeft } from "lucide-react";
@@ -44,7 +45,7 @@ const campaignerNavItems = [
 ];
 
 
-export function AppLayout({
+function AppLayoutContent({
   children,
   pageTitle,
 }: {
@@ -128,5 +129,19 @@ export function AppLayout({
         </main>
       </div>
     </div>
+  );
+}
+
+export function AppLayout({
+  children,
+  pageTitle,
+}: {
+  children: React.ReactNode;
+  pageTitle: string;
+}) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AppLayoutContent children={children} pageTitle={pageTitle} />
+    </Suspense>
   );
 }
