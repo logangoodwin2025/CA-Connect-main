@@ -26,6 +26,7 @@ function AddContactPageContent() {
     const [searchResult, setSearchResult] = useState<boolean>(false);
     const [selectedRelationship, setSelectedRelationship] = useState<Relationship | null>(null);
     const [selectedSupport, setSelectedSupport] = useState<SupportLikelihood | null>(null);
+    const [familyRelation, setFamilyRelation] = useState<string>('');
     const searchParams = useSearchParams();
     const role = searchParams.get('role') || 'campaigner';
 
@@ -88,6 +89,17 @@ function AddContactPageContent() {
 
                                     ))}
                                 </div>
+                                {selectedRelationship === 'Family' && (
+                                    <div className="mt-3 space-y-2">
+                                        <Label htmlFor="family-relation">Specify Family Relation</Label>
+                                        <Input
+                                            id="family-relation"
+                                            placeholder="e.g., brother, sister, wife, husband, father, mother..."
+                                            value={familyRelation}
+                                            onChange={(e) => setFamilyRelation(e.target.value)}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             <div>

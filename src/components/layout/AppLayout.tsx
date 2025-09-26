@@ -4,7 +4,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
-import { Home, Users, MessageSquare, Network, Vote, Share2, Menu, Settings, Copy, ArrowLeft } from "lucide-react";
+import { Home, Users, MessageSquare, Network, Vote, Share2, Menu, Settings, Copy, ArrowLeft, LogOut } from "lucide-react";
 
 import {
   Sheet,
@@ -84,6 +84,14 @@ function AppLayoutContent({
               ))}
             </nav>
           </div>
+          <div className="p-2 lg:p-4">
+            <Link href="/">
+              <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground hover:text-primary">
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
       <div className="flex flex-col">
@@ -121,6 +129,12 @@ function AppLayoutContent({
                     {item.label}
                   </Link>
                 ))}
+                <Link href="/" className="mx-[-0.65rem] mt-4">
+                  <Button variant="ghost" className="w-full justify-start gap-4 text-muted-foreground hover:text-foreground">
+                    <LogOut className="h-5 w-5" />
+                    Logout
+                  </Button>
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>
